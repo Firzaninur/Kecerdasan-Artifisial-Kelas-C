@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Klasifikasi Karakteristik Lereng untuk Kajian Awal Kerawanan Longsor di Kabupaten Gowa</title>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@500&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.js"></script>
+<style>
+:root{--bg:#f3f6f5;--card:#fff;--ink:#12201e;--mute:#5b6d6a;--line:#d9e2e0;--acc:#0f6b66;--accsoft:#e2f0ee;
+--c1:#4f9d63;--c2:#c4b232;--c3:#e08a2d;--c4:#b8362e;--r1:#4f9d63;--r2:#e08a2d;--r3:#b8362e;--warn:#fff4d6;--warnink:#6b4a00;
+box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#0e1716;--card:#16231f;--ink:#e6efed;--mute:#9bb0ac;--line:#294039;--acc:#4fc3b8;--accsoft:#1b3531;--warn:#3a2f10;--warnink:#f1d58a}}
+:root[data-theme="dark"]{--bg:#0e1716;--card:#16231f;--ink:#e6efed;--mute:#9bb0ac;--line:#294039;--acc:#4fc3b8;--accsoft:#1b3531;--warn:#3a2f10;--warnink:#f1d58a}
+*{box-sizing:border-box}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.5 "IBM Plex Sans","Segoe UI",system-ui,sans-serif}
+body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);background:var(--bg);z-index:10}
+.wrap{max-width:1360px;margin:0 auto;padding:0 20px 40px}
+header{padding:28px 0 16px;display:flex;gap:24px;justify-content:space-between;flex-wrap:wrap;align-items:flex-end}
+h1{font-size:clamp(1.5rem,2.6vw,2.2rem);line-height:1.2;margin:0 0 8px;font-weight:600;max-width:34ch}
+.sub{color:var(--mute);margin:0}
+.id{text-align:right;font-size:.95rem;line-height:1.6}
+.id b{font-weight:600}.id span{font-family:"IBM Plex Mono",monospace}
+.banner{background:var(--warn);color:var(--warnink);border-radius:8px;padding:10px 14px;font-size:.95rem;margin-bottom:16px}
+.filters{position:sticky;top:env(safe-area-inset-top,0px);z-index:9;background:var(--card);border:1px solid var(--line);border-radius:10px;padding:12px 16px;display:flex;flex-wrap:wrap;gap:14px 28px;align-items:center;margin-bottom:18px}
+.fg{display:flex;flex-direction:column;gap:4px}
+.fg>label,.fg>.lb{font-size:.82rem;color:var(--mute)}
+.chips{display:flex;gap:6px;flex-wrap:wrap}
+.chip{border:1px solid var(--line);background:transparent;color:var(--ink);border-radius:999px;padding:4px 12px;font:inherit;font-size:.88rem;cursor:pointer}
+.chip[aria-pressed="true"]{background:var(--acc);border-color:var(--acc);color:#fff}
+.rng{display:flex;gap:6px;align-items:center}
+input[type=number]{width:84px;font:inherit;padding:4px 8px;border:1px solid var(--line);border-radius:6px;background:var(--bg);color:var(--ink)}
+button.act{font:inherit;padding:6px 14px;border-radius:6px;border:1px solid var(--acc);background:transparent;color:var(--acc);cursor:pointer}
+.kpis{display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));gap:14px;margin-bottom:18px}
+.kpi{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:16px 18px;border-left:4px solid var(--acc)}
+.kpi .l{font-size:.9rem;color:var(--mute)}
+.kpi .v{font-size:2rem;font-weight:600;line-height:1.2;margin-top:2px}
+.kpi .n{font-size:.82rem;color:var(--mute)}
+.grid{display:grid;grid-template-columns:repeat(12,1fr);gap:14px;margin-bottom:18px}
+.card{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:16px 18px;min-width:0}
+.card h2{font-size:1.05rem;margin:0 0 2px;font-weight:600}
+.card p.d{margin:0 0 10px;color:var(--mute);font-size:.88rem}
+.cv{position:relative;height:300px}
+.s12{grid-column:span 12}.s8{grid-column:span 8}.s6{grid-column:span 6}.s4{grid-column:span 4}
+@media (max-width:980px){.s8,.s6,.s4{grid-column:span 12}.id{text-align:left}}
+h3.sec{font-size:1.2rem;margin:26px 0 10px}
+.ins{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:14px}
+.in{background:var(--card);border:1px solid var(--line);border-left:4px solid var(--acc);border-radius:10px;padding:14px 16px}
+.in b{display:block;margin-bottom:4px}
+.in.w{border-left-color:var(--c3)}
+details.card summary{cursor:pointer;font-weight:600}
+.tw{overflow-x:auto;margin-top:10px}
+table{border-collapse:collapse;width:100%;font-size:.92rem}
+th,td{padding:6px 10px;border-bottom:1px solid var(--line);text-align:right;white-space:nowrap}
+th:first-child,td:first-child,th:nth-child(5),td:nth-child(5),th:last-child,td:last-child{text-align:left}
+.bd{display:inline-block;padding:1px 9px;border-radius:999px;color:#fff;font-size:.8rem}
+.method{font-size:.9rem;color:var(--mute)}
+.method li{margin-bottom:4px}
+footer{margin-top:28px;color:var(--mute);font-size:.85rem}
+@media print{.filters,button{display:none}body{background:#fff}}
+</style>
+</head>
+<body>
+<div class="wrap">
+<header>
+  <div>
+    <h1>Klasifikasi Karakteristik Lereng untuk Kajian Awal Kerawanan Longsor di Kabupaten Gowa</h1>
+    <p class="sub">Dashboard eksplorasi 30 titik contoh · elevasi 45–1.795 m · data simulasi</p>
+  </div>
+  <div class="id"><b>Nama:</b> Firzani Nur<br><b>NIM:</b> <span>H061241026</span><br>
+    <button class="act" id="theme" type="button">Mode gelap/terang</button></div>
+</header>
+
+<div class="banner"><b>Perhatian:</b> seluruh data pada dashboard ini adalah <b>data simulasi (bukan hasil pengukuran lapangan)</b>. Hasil klasifikasi hanya untuk kajian awal dan latihan visualisasi, bukan untuk pengambilan keputusan mitigasi.</div>
+
+<section class="filters" aria-label="Filter data">
+  <div class="fg"><span class="lb">Kelas lereng</span><div class="chips" id="fSlope"></div></div>
+  <div class="fg"><span class="lb">Tingkat kerawanan awal</span><div class="chips" id="fRisk"></div></div>
+  <div class="fg"><label>Elevasi (m)</label><div class="rng"><input type="number" id="eMin" step="50"> –<input type="number" id="eMax" step="50"></div></div>
+  <div class="fg"><label>Curah hujan (mm/tahun)</label><div class="rng"><input type="number" id="rMin" step="50"> –<input type="number" id="rMax" step="50"></div></div>
+  <button class="act" id="reset" type="button">Atur ulang filter</button>
+</section>
+
+<section class="kpis" id="kpis"></section>
+
+<section class="grid">
+  <div class="card s8"><h2>Kemiringan lereng terhadap elevasi</h2><p class="d">Tiap titik diwarnai menurut kelas lereng. Garis putus-putus menandai batas 25° (kelas curam).</p><div class="cv"><canvas id="c1"></canvas></div></div>
+  <div class="card s4"><h2>Distribusi kelas lereng</h2><p class="d">Jumlah titik per kelas kemiringan.</p><div class="cv"><canvas id="c2"></canvas></div></div>
+  <div class="card s6"><h2>Kemiringan terhadap curah hujan</h2><p class="d">Sebaran gabungan dua faktor pemicu utama.</p><div class="cv"><canvas id="c3"></canvas></div></div>
+  <div class="card s6"><h2>Rerata kemiringan dan curah hujan per zona elevasi</h2><p class="d">Zona selebar 500 m (batang: kemiringan; garis: curah hujan).</p><div class="cv"><canvas id="c4"></canvas></div></div>
+  <div class="card s4"><h2>Tingkat kerawanan awal</h2><p class="d">Proporsi titik pada tiap tingkat indeks.</p><div class="cv"><canvas id="c5"></canvas></div></div>
+  <div class="card s8"><h2>Catatan metode</h2>
+    <ul class="method">
+      <li><b>Kelas lereng:</b> Datar (&lt;8°), Landai (8–&lt;15°), Agak curam (15–&lt;25°), Curam (25–45°).</li>
+      <li><b>Kelas curah hujan:</b> Rendah (&lt;2.000), Sedang (2.000–2.299), Tinggi (≥2.300 mm/tahun).</li>
+      <li><b>Indeks kerawanan awal</b> = 0,6 × skor lereng + 0,4 × skor hujan (keduanya dinormalisasi 0–1). Rendah &lt;0,33; Sedang 0,33–0,66; Tinggi ≥0,66.</li>
+      <li>Bobot dan ambang batas bersifat asumsi untuk kajian awal. Faktor lain seperti litologi, tutupan lahan, dan struktur geologi belum dimasukkan.</li>
+      <li>Data: <i>contoh_dashboard_lereng_gowa_simulasi.csv</i>, tertanam langsung dalam berkas HTML ini (30 baris).</li>
+    </ul></div>
+</section>
+
+<h3 class="sec">Temuan dan rekomendasi (dihitung dari data terfilter)</h3>
+<section class="ins" id="ins"></section>
+
+<h3 class="sec">Tabel rincian</h3>
+<details class="card"><summary>Tampilkan/sembunyikan tabel titik terfilter</summary>
+  <div class="tw"><table><thead><tr><th>No</th><th>Elevasi (m)</th><th>Kemiringan (°)</th><th>Curah hujan</th><th>Kelas lereng</th><th>Indeks</th><th>Kerawanan</th></tr></thead><tbody id="tb"></tbody></table></div>
+</details>
+<footer>Firzani Nur · H061241026 · Geofisika. Dashboard ini memuat data simulasi sehingga tidak mewakili kondisi sebenarnya di Kabupaten Gowa.</footer>
+</div>
+
+<script>
+/* ===== Data tertanam (CSV simulasi): [elevasi_m, kemiringan_derajat, curah_hujan_mm_tahunan] ===== */
+const RAW=[[45,2.1,1800],[72,3.4,1850],[110,5.8,1900],[155,7.2,1950],[205,9.5,2000],[260,11.3,2050],[315,13.8,2100],[370,16.1,2150],[430,18.7,2200],[495,21.4,2250],[560,24.2,2300],[625,27.5,2350],[690,30.1,2400],[755,33.6,2450],[820,36.2,2500],[885,8.4,2050],[950,12.6,2100],[1015,15.7,2150],[1080,19.3,2200],[1145,22.8,2250],[1210,26.4,2300],[1275,29.7,2350],[1340,32.5,2400],[1405,35.1,2450],[1470,38.4,2500],[1535,17.2,2150],[1600,20.5,2200],[1665,25.8,2250],[1730,31.4,2300],[1795,34.7,2350]];
+
+/* ===== Klasifikasi ===== */
+const SL=["Datar","Landai","Agak curam","Curam"], RK=["Rendah","Sedang","Tinggi"];
+const slopeClass=s=>s<8?0:s<15?1:s<25?2:3;
+const rainClass=r=>r<2000?0:r<2300?1:2;
+const DATA=RAW.map(([e,s,r],i)=>{
+  const sc=slopeClass(s), rc=rainClass(r);
+  const idx=0.6*(sc/3)+0.4*(rc/2);           // indeks 0–1
+  return {no:i+1,e,s,r,sc,rc,idx,risk:idx<0.33?0:idx<0.66?1:2};
+});
+const css=v=>getComputedStyle(document.documentElement).getPropertyValue(v).trim();
+const SC=()=>[css('--c1'),css('--c2'),css('--c3'),css('--c4')], RC=()=>[css('--r1'),css('--r2'),css('--r3')];
+
+/* ===== Statistik bantu ===== */
+const mean=a=>a.length?a.reduce((x,y)=>x+y,0)/a.length:NaN;
+const corr=(x,y)=>{if(x.length<3)return NaN;const mx=mean(x),my=mean(y);let n=0,dx=0,dy=0;
+  x.forEach((v,i)=>{n+=(v-mx)*(y[i]-my);dx+=(v-mx)**2;dy+=(y[i]-my)**2});return n/Math.sqrt(dx*dy)};
+const f1=v=>isNaN(v)?"–":v.toLocaleString("id-ID",{minimumFractionDigits:1,maximumFractionDigits:1});
+const f0=v=>isNaN(v)?"–":Math.round(v).toLocaleString("id-ID");
+const f2=v=>isNaN(v)?"–":v.toLocaleString("id-ID",{minimumFractionDigits:2,maximumFractionDigits:2});
+
+/* ===== Filter ===== */
+const st={sl:new Set([0,1,2,3]),rk:new Set([0,1,2])};
+const $=id=>document.getElementById(id);
+function chips(el,labels,set){
+  labels.forEach((t,i)=>{const b=document.createElement('button');b.type='button';b.className='chip';b.textContent=t;b.setAttribute('aria-pressed','true');
+    b.onclick=()=>{set.has(i)?set.delete(i):set.add(i);b.setAttribute('aria-pressed',set.has(i));render()};el.appendChild(b)});
+}
+chips($('fSlope'),SL,st.sl);chips($('fRisk'),RK,st.rk);
+const EB=[45,1795],RB=[1800,2500];
+function resetInputs(){$('eMin').value=EB[0];$('eMax').value=EB[1];$('rMin').value=RB[0];$('rMax').value=RB[1]}
+resetInputs();
+['eMin','eMax','rMin','rMax'].forEach(id=>$(id).addEventListener('input',render));
+$('reset').onclick=()=>{[st.sl,st.rk].forEach((s,k)=>{(k?[0,1,2]:[0,1,2,3]).forEach(i=>s.add(i))});
+  document.querySelectorAll('.chip').forEach(c=>c.setAttribute('aria-pressed','true'));resetInputs();render()};
+const getF=()=>DATA.filter(d=>st.sl.has(d.sc)&&st.rk.has(d.risk)&&d.e>=+$('eMin').value&&d.e<=+$('eMax').value&&d.r>=+$('rMin').value&&d.r<=+$('rMax').value);
+
+/* ===== Grafik ===== */
+const charts={};
+function opts(xt,yt,extra={}){const g=css('--line'),c=css('--mute');
+  return {responsive:true,maintainAspectRatio:false,animation:{duration:200},color:css('--ink'),
+    plugins:{legend:{labels:{color:css('--ink')}}},
+    scales:{x:{title:{display:true,text:xt,color:c},ticks:{color:c},grid:{color:g}},y:{title:{display:true,text:yt,color:c},ticks:{color:c},grid:{color:g}}},...extra}}
+const thr={id:'thr',afterDraw(ch){if(ch.canvas.id!=='c1')return;const y=ch.scales.y.getPixelForValue(25),{left,right}=ch.chartArea,x=ch.ctx;
+  x.save();x.setLineDash([6,4]);x.strokeStyle=css('--mute');x.beginPath();x.moveTo(left,y);x.lineTo(right,y);x.stroke();x.restore()}};
+function scatterSets(F,xk){return SL.map((n,i)=>({label:n,data:F.filter(d=>d.sc===i).map(d=>({x:d[xk],y:d.s})),backgroundColor:SC()[i],pointRadius:6,pointHoverRadius:8}))}
+const tipS=(xl,xu)=>({plugins:{legend:{labels:{color:css('--ink')}},tooltip:{callbacks:{label:c=>`${c.dataset.label}: ${xl} ${c.parsed.x.toLocaleString('id-ID')}${xu}, lereng ${c.parsed.y}°`}}}});
+function render(){
+  const F=getF(),n=F.length,sl=F.map(d=>d.s);
+  /* KPI */
+  const cur=F.filter(d=>d.sc===3).length,hi=F.filter(d=>d.risk===2).length;
+  const K=[["Jumlah titik",f0(n),`dari ${DATA.length} titik`],["Rerata kemiringan",f1(mean(sl))+"°","maks "+f1(n?Math.max(...sl):NaN)+"°"],
+    ["Rerata curah hujan",f0(mean(F.map(d=>d.r))),"mm/tahun"],["Titik lereng curam (≥25°)",n?f1(cur/n*100)+"%":"–",cur+" titik"],
+    ["Kerawanan awal tinggi",n?f1(hi/n*100)+"%":"–",hi+" titik"],["Rerata indeks",f2(mean(F.map(d=>d.idx))),"skala 0–1"]];
+  $('kpis').innerHTML=K.map(k=>`<div class="kpi"><div class="l">${k[0]}</div><div class="v">${k[1]}</div><div class="n">${k[2]}</div></div>`).join('');
+  /* Grafik 1 & 3 */
+  upd('c1','scatter',{datasets:scatterSets(F,'e')},()=>({...opts('Elevasi (m)','Kemiringan (°)',tipS('elevasi',' m')),scales:{...opts('Elevasi (m)','Kemiringan (°)').scales}}),[thr]);
+  upd('c3','scatter',{datasets:scatterSets(F,'r')},()=>({...opts('Curah hujan tahunan (mm)','Kemiringan (°)',tipS('hujan',' mm'))}));
+  /* Grafik 2 */
+  upd('c2','bar',{labels:SL,datasets:[{label:'Jumlah titik',data:SL.map((_,i)=>F.filter(d=>d.sc===i).length),backgroundColor:SC()}]},
+    ()=>{const o=opts('Kelas lereng','Jumlah titik');o.plugins.legend.display=false;o.scales.y.ticks.precision=0;o.scales.y.beginAtZero=true;return o});
+  /* Grafik 4: zona elevasi */
+  const Z=["0–500","500–1000","1000–1500","1500–2000"],zi=e=>Math.min(3,Math.floor(e/500));
+  const zs=Z.map((_,i)=>F.filter(d=>zi(d.e)===i)),zv=a=>a.length?+mean(a.map(d=>d.s)).toFixed(1):null,zr=a=>a.length?Math.round(mean(a.map(d=>d.r))):null;
+  upd('c4','bar',{labels:Z.map(z=>z+' m'),datasets:[{type:'bar',label:'Rerata kemiringan (°)',data:zs.map(zv),backgroundColor:css('--acc'),yAxisID:'y'},
+    {type:'line',label:'Rerata curah hujan (mm)',data:zs.map(zr),borderColor:css('--c3'),backgroundColor:css('--c3'),yAxisID:'y1',tension:.2,pointRadius:5}]},
+    ()=>{const o=opts('Zona elevasi','Kemiringan (°)');o.scales.y.beginAtZero=true;
+      o.scales.y1={position:'right',title:{display:true,text:'Curah hujan (mm/tahun)',color:css('--mute')},ticks:{color:css('--mute')},grid:{drawOnChartArea:false}};return o});
+  /* Grafik 5 */
+  upd('c5','doughnut',{labels:RK,datasets:[{data:RK.map((_,i)=>F.filter(d=>d.risk===i).length),backgroundColor:RC(),borderColor:css('--card')}]},
+    ()=>({responsive:true,maintainAspectRatio:false,animation:{duration:200},cutout:'58%',plugins:{legend:{position:'bottom',labels:{color:css('--ink')}}}}));
+  insights(F);
+  $('tb').innerHTML=F.map(d=>`<tr><td>${d.no}</td><td>${f0(d.e)}</td><td>${f1(d.s)}</td><td>${f0(d.r)}</td><td><span class="bd" style="background:${SC()[d.sc]}">${SL[d.sc]}</span></td><td>${f2(d.idx)}</td><td><span class="bd" style="background:${RC()[d.risk]}">${RK[d.risk]}</span></td></tr>`).join('');
+}
+function upd(id,type,data,optFn,plugins=[]){
+  const o=optFn();
+  if(!charts[id]){charts[id]=new Chart($(id),{type,data,options:o,plugins});}
+  else{const c=charts[id];c.data=data;c.options=o;c.update();}
+}
+
+/* ===== Insight dinamis ===== */
+function insights(F){
+  const n=F.length,I=[];
+  if(!n){$('ins').innerHTML='<div class="in w"><b>Tidak ada data</b>Tidak ada titik yang memenuhi filter. Longgarkan filter atau tekan “Atur ulang filter”.</div>';return}
+  const rS=corr(F.map(d=>d.e),F.map(d=>d.s)),rR=corr(F.map(d=>d.r),F.map(d=>d.s));
+  const cur=F.filter(d=>d.sc===3),hi=F.filter(d=>d.risk===2);
+  const dom=SL.map((_,i)=>F.filter(d=>d.sc===i).length),mi=dom.indexOf(Math.max(...dom));
+  I.push(["Kelas lereng dominan",`Kelas ${SL[mi].toLowerCase()} mencakup ${dom[mi]} dari ${n} titik (${f1(dom[mi]/n*100)}%). Apakah sebaran ini mewakili morfologi Gowa yang sebenarnya? Uji dengan DEM resmi sebelum dipakai lebih lanjut.`]);
+  I.push(["Hubungan kemiringan dan elevasi",isNaN(rS)?"Titik terlalu sedikit untuk menghitung korelasi.":
+    `Korelasi kemiringan–elevasi r = ${f2(rS)}. ${Math.abs(rS)<0.5?"Hubungannya lemah: kemiringan naik-turun di sepanjang elevasi, sehingga elevasi bukan pengganti kemiringan.":"Hubungannya cukup kuat, tetapi pola bertingkat pada data simulasi perlu diperiksa agar tidak disalahartikan."} Disarankan memakai kemiringan terukur, bukan elevasi, sebagai parameter utama.`]);
+  I.push(["Hubungan kemiringan dan curah hujan",isNaN(rR)?"Titik terlalu sedikit untuk menghitung korelasi.":
+    `Korelasi kemiringan–curah hujan r = ${f2(rR)}. ${rR>0.6?"Titik berlereng curam cenderung juga berhujan tinggi sehingga dua faktor ini saling menguatkan. Pastikan keterkaitan ini nyata dan bukan artefak data simulasi.":"Keterkaitan kedua faktor tidak terlalu kuat pada subset ini."}`]);
+  I.push(["Prioritas peninjauan",hi.length?`${hi.length} titik (${f1(hi.length/n*100)}%) masuk kerawanan awal tinggi, dengan elevasi ${f0(Math.min(...hi.map(d=>d.e)))}–${f0(Math.max(...hi.map(d=>d.e)))} m. Titik ini layak diprioritaskan untuk verifikasi lapangan, pengamatan geologi, dan survei geofisika (misalnya geolistrik) bila diperlukan.`:"Tidak ada titik berkerawanan tinggi pada filter ini. Periksa apakah ambang kelas terlalu longgar."]);
+  I.push(["Lereng curam (≥25°)",cur.length?`${cur.length} titik (${f1(cur.length/n*100)}%) berkemiringan ≥25°, dengan rerata hujan ${f0(mean(cur.map(d=>d.r)))} mm/tahun. Perlukah penataan ruang dan zona penyangga di sekitar titik tersebut dikaji lebih dulu?`:"Tidak ada titik berkemiringan ≥25° pada filter ini."]);
+  I.push(["Keterbatasan",`Indeks hanya memadukan kemiringan dan curah hujan dengan bobot asumsi. Litologi, tutupan lahan, struktur geologi, dan kejadian longsor historis belum masuk, dan data berasal dari simulasi.`]);
+  $('ins').innerHTML=I.map((x,i)=>`<div class="in${i===5?' w':''}"><b>${x[0]}</b>${x[1]}</div>`).join('');
+}
+
+/* ===== Tema ===== */
+$('theme').onclick=()=>{const r=document.documentElement;const dark=r.dataset.theme?r.dataset.theme==='dark':matchMedia('(prefers-color-scheme:dark)').matches;
+  r.dataset.theme=dark?'light':'dark';render()};
+matchMedia('(prefers-color-scheme:dark)').addEventListener('change',()=>render());
+render();
+</script>
+</body>
+</html>
